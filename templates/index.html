@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Huella de Carbono</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function actualizarTexto() {
+            const transporte = document.getElementById('transporte');
+            const transporteSeleccionado = transporte.options[transporte.selectedIndex].text;
+            const labelKm = document.getElementById("label-kilometros");
+            if (transporteSeleccionado) {
+                labelKm.innerText = `¿Cuántos kilómetros viajas en ${transporteSeleccionado} a la semana aproximadamente?`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Calculadora de Huella de Carbono</h1>
+
+    <form method="POST">
+        <h3>Selecciona el vehículo que usas habitualmente:</h3>
+
+        <select id="transporte" name="transporte" onchange="actualizarTexto()" required>
+            <option value="" disabled selected>-- Elige una opción --</option>
+            <option value="Auto">Auto</option>
+            <option value="Moto">Moto</option>
+            <option value="Camión">Camión / Autobús</option>
+            <option value="Bicicleta">Bicicleta</option>
+            <option value="Caminar">Caminar</option>
+        </select><br><br>
+
+        <label id="label-kilometros">¿Cuántos kilómetros viajas en tu medio de transporte a la semana aproximadamente?</label><br>
+        <input type="number" name="kilometros" required step="0.01"><br><br>
+
+        <button type="submit">Calcular Huella</button>
+    </form>
+
+    {% if resultado is not none %}
+        <div class="resultado {{ nivel }}">
+            Tu huella de carbono semanal es: {{ resultado }} kg de CO₂
+        </div>
+    {% endif %}
+
+    <h2>Interpretación de tu resultado:
+        <span class="help-icon">?</span>
+    </h2>
+
+    <table class="tabla-huella">
+        <thead>
+            <tr>
+                <th>Nivel</th>
+                <th>Rango (kg CO₂ / semana)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="excelente">Excelente</td>
+                <td>0 - 5</td>
+            </tr>
+            <tr>
+                <td class="bueno">Bueno</td>
+                <td>5 - 15</td>
+            </tr>
+            <tr>
+                <td class="regular">Regular</td>
+                <td>15 - 25</td>
+            </tr>
+            <tr>
+                <td class="malo">Malo</td>
+                <td>25 - 35</td>
+            </tr>
+            <tr>
+                <td class="muy-malo">Muy malo</td>
+                <td>Más de 35</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
